@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/user")
+@RequestMapping("/api/v1/user")
 public class UserController {
 
     private UserService userService;
@@ -38,6 +38,24 @@ public class UserController {
         String encryptedPw = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt(5));
         userDto.setPassword(encryptedPw);
         userDto.setRole("ROLE_USER");
+        User savedUser = userService.createUser(userDto);
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/signup-property-Owner")
+    public ResponseEntity<?> createPropertyOwnerUser(@RequestBody UserDto userDto) {
+        Optional<User> byUsername = userRepository.findByUsername(userDto.getUsername());
+        if(byUsername.isPresent()){
+            return new ResponseEntity<>("Username already exists",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        Optional<User> byEmail = userRepository.findByEmail(userDto.getEmail());
+        if(byEmail.isPresent()){
+            return new ResponseEntity<>("Email already exists", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        String encryptedPw = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt(5));
+        userDto.setPassword(encryptedPw);
+        userDto.setRole("ROLE_OWNER");
         User savedUser = userService.createUser(userDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
