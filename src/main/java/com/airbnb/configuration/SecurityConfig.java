@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.addFilterBefore(jwtFilter, AuthorizationFilter.class);
 //        http.authorizeHttpRequests().requestMatchers("/api/v1/user/signup","/api/v1/user/signup-property-Owner")
 //                                    .permitAll()
-//                                    .requestMatchers("/api/v1/")
+//                                    .requestMatchers("/api/v1/property/addProperty")
 //                                    .hasAnyRole("OWNER","ADMIN")
 //                                    .anyRequest()
 //                                    .permitAll();
